@@ -1,0 +1,29 @@
+{
+  "name": "dzl-fast-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "generate-migration": "drizzle-kit generate:pg --out src/db/migrations --schema src/db/schema.ts",
+    "migrate": "ts-node src/db/migrate",
+    "dev": "tsx watch src/api/users.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hono/node-server": "^1.9.1",
+    "argon2": "^0.40.1",
+    "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.30.7",
+    "hono": "^4.2.2",
+    "pg": "^8.11.5",
+    "tsx": "^4.7.2"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.4",
+    "drizzle-kit": "^0.20.14",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.4"
+  }
+}

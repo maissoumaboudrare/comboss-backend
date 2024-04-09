@@ -1,0 +1,34 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1712264245029,
+      "tag": "0000_funny_spectrum",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1712264718423,
+      "tag": "0001_aromatic_silver_sable",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1712264954526,
+      "tag": "0002_wealthy_zaran",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1712653200711,
+      "tag": "0003_puzzling_iron_man",
+      "breakpoints": true
+    }
+  ]
+}
