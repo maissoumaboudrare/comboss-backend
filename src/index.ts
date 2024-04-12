@@ -35,4 +35,9 @@ const main = async () => {
 
 main();
 
+//TODO : 
+/*
+1. connect user with http request (no with hard code)
+2. verif user data before sending data : email, password, pseudo
+*/
 
