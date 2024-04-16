@@ -22,7 +22,6 @@ export const getUser = async (id: string) => {
 export const createUser = async (
   user: Omit<InsertUser, "id" | "createdAt">
 ) => {
-  //if (!user && user.email && user.password) return "No user added !";
 
   const hashedPassword = await argon2.hash(user.password, {
     type: argon2.argon2id,
@@ -32,18 +31,19 @@ export const createUser = async (
     .insert(schema.users)
     .values(userWithHashedPassword)
     .returning();
+
+    // règle ts pour vérif tableau
   return addedUser[0];
 };
 
 export const authUser = async (user: Omit<InsertUser, "id" | "createdAt">) => {
-
-  //! gérer le cas de l'email non similaire. Le SQL me retourne un tableau vide au lieu d'un boolean.
-  //* peut-être utiliser le eq ? 
 
   const isUserAccount = await db
     .select()
     .from(schema.users)
     .where(sql`${schema.users.email} = ${user.email}`);
 
-  return isUserAccount;
+  return isUserAccount.length === 0 ? undefined : isUserAccount[0];
 };
+
+// trouver un moyen de prouver qui on est pour les requêtes suivantes.

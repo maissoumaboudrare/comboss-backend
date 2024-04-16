@@ -22,15 +22,18 @@ users.post("/", async (c) => {
 });
 users.post("/auth", async (c) => {
   const credentials = await c.req.json();
-  if (!credentials.email) return c.json("User not found !");
   const isUserAccount = await model.authUser(credentials);
-
-  const isCorrectPassword = await argon2.verify(
-    isUserAccount[0].password,
-    credentials.password
-  );
-
-  return c.json(isCorrectPassword ? "Correct 👌" : "Incorrect ✋");
+  
+  if (isUserAccount) {
+    
+    const isCorrectPassword = await argon2.verify(
+      isUserAccount[0].password,
+      credentials.password
+    );
+    return c.json(isCorrectPassword ? "Correct 👌" : "Incorrect ✋");
+  }
+  
+  return c.json("User not found !");
 });
 app.route("/api/users", users);
 
