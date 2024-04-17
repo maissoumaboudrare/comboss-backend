@@ -39,12 +39,6 @@ app.route("/api/users", users);
 
 app.get("/api/*", (c) => c.text("API endpoint is not found", 404));
 
-// app.post('/users', async (c) => {
-//   const data = await c.req.json()
-//   console.log(data)
-//   return c.json(data)
-// })
-
 const port = 3000;
 
 serve({
