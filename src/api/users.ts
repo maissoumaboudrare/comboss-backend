@@ -1,7 +1,11 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
+import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } from 'hono/cookie'
 import * as model from "../model";
 import * as argon2 from "argon2";
+
+import * as crypto from "crypto"
+
 
 const app = new Hono();
 
@@ -35,6 +39,42 @@ users.post("/auth", async (c) => {
   
   return c.json("User not found !");
 });
+
+// Login & Logout
+users.post("/login", async (c) => {
+  const credentials = await c.req.json();
+  const user = await model.authUser(credentials);
+  
+  if (user) {
+    const isCorrectPassword = await argon2.verify(user.password, credentials.password);
+
+    if (isCorrectPassword) {
+      //! ! high severity vulnerability on UUID package
+      const token: string = crypto.randomUUID();
+      const expirationTime = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+      await model.createSession({ userId: user.id, token, expirationTime });
+
+      setCookie(c, "session_token", token, { httpOnly: true, expires: expirationTime })
+
+      return c.json({ message: "Login successful" });
+    }
+  }
+
+  return c.json({ message: "Invalid credentials" }, 401);
+});
+
+users.post("/logout", async (c) => {
+  const token = getCookie(c, "session_token");
+  
+  if (token) {
+    await model.deleteSession(token);
+    deleteCookie(c, "session_token");
+  }
+
+  return c.json({ message: "Logout successful" });
+});
+
 app.route("/api/users", users);
 
 app.get("/api/*", (c) => c.text("API endpoint is not found", 404));
@@ -45,3 +85,4 @@ serve({
   fetch: app.fetch,
   port,
 });
+

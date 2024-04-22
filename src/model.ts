@@ -1,9 +1,10 @@
 import { sql } from "drizzle-orm";
 import { db } from "./db/db";
 import * as schema from "./db/schema";
-import { InsertUser } from "./db/schema";
+import { InsertUser, InsertSession } from "./db/schema";
 import * as argon2 from "argon2";
 
+// USER
 export const getUsers = async () => {
   const users = await db.select().from(schema.users);
 
@@ -46,4 +47,25 @@ export const authUser = async (user: Omit<InsertUser, "id" | "createdAt">) => {
   return isUserAccount.length === 0 ? undefined : isUserAccount[0];
 };
 
-// trouver un moyen de prouver qui on est pour les requêtes suivantes.
+// SESSION
+export const createSession = async (session: Omit<InsertSession, "id">) => {
+  const addedSession = await db
+    .insert(schema.sessions)
+    .values(session)
+    .returning();
+
+  return addedSession[0];
+};
+
+export const getSessionByToken = async (token: string) => {
+  const session = await db
+    .select()
+    .from(schema.sessions)
+    .where(sql`${schema.sessions.token} = ${token}`);
+
+  return session.length === 0 ? undefined : session[0];
+};
+
+export const deleteSession = async (token: string) => {
+  await db.delete(schema.sessions).where(sql`${schema.sessions.token} = ${token}`);
+};

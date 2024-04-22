@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "generate-migration": "drizzle-kit generate:pg --out src/db/migrations --schema src/db/schema.ts",
     "migrate": "ts-node src/db/migrate",
