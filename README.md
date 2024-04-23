@@ -1,90 +1,82 @@
-# Project Name
-COMBOSSS !
-> Outline a brief description of your project.
-> Live demo [_here_](https://www.example.com). <!-- If you have the project hosted somewhere, include the link here. -->
+# Combosss 🔥
+
+> Combosss is a web app 📱 designed for fans of versus fighting games 🎮 (2D brawlers) to share their best combos for their favorite characters and games across any gaming platform. 
+Currently, the focus is on Street Fighter 6. As a fighting game enthusiast, finding or creating combos as a beginner can be challenging. Many e-sports professionals share their combo discoveries through YouTube videos. Combosss aims to centralize and simplify this information, making combo mastery more accessible. 
+The platform relies heavily on an active and supportive community that continues to evolve. With e-sports gaining more prominence in the gaming ecosystem in 2024, Combosss offers players a space to create, share, and vote on the most impressive combos. Become the boss of combos!
 
 ## Table of Contents
-* [General Info](#general-information)
+* [General Information](#general-information)
 * [Technologies Used](#technologies-used)
 * [Features](#features)
-* [Screenshots](#screenshots)
 * [Setup](#setup)
-* [Usage](#usage)
 * [Project Status](#project-status)
 * [Room for Improvement](#room-for-improvement)
 * [Acknowledgements](#acknowledgements)
 * [Contact](#contact)
-<!-- * [License](#license) -->
-
 
 ## General Information
-- Provide general information about your project here.
-- What problem does it (intend to) solve?
-- What is the purpose of your project?
-- Why did you undertake it?
-<!-- You don't have to answer all the questions - just the ones relevant to your project. -->
-
+Combosss is a web app that serves as a hub for versus fighting game enthusiasts to share and discover new combos 🕹️ for their favorite characters and games, with a current focus on Street Fighter 6. The platform aims to simplify the learning curve of mastering combos by centralizing information and fostering a supportive community. As e-sports continues to grow in 2024, Combosss offers an essential tool for players looking to elevate their game.
 
 ## Technologies Used
-- Tech 1 - version 1.0
-- Tech 2 - version 2.0
-- Tech 3 - version 3.0
-
+- @hono/node-server - v1.9.1
+- argon2 - v0.40.1
+- dotenv - v16.4.5
+- drizzle-orm - v0.30.7
+- hono - v4.2.2
+- pg - v8.11.5
+- tsx - v4.7.2
+- TypeScript - v5.4.4
 
 ## Features
-List the ready features here:
-- Awesome feature 1
-- Awesome feature 2
-- Awesome feature 3
-
+- **User Authentication**: Secure sign-up and login functionality.
+- **Combo Creation**: Create and share combos for specific characters.
+- **Voting System**: Users can vote on the most impressive combos.
+- **User Dashboard**: Manage and favorite combos.
 
 ## Screenshots
-![Example screenshot](./img/screenshot.png)
-<!-- If you have screenshots you'd like to share, include them here. -->
+SOON ! 🏋️‍♂️
+<!-- Include screenshots if available -->
 
+## Setup ⚙️
+To run Combosss locally, you'll need to have Node.js and PostgreSQL installed on your machine. Clone the repository and install the dependencies using npm or yarn:
 
-## Setup
-What are the project requirements/dependencies? Where are they listed? A requirements.txt or a Pipfile.lock file perhaps? Where is it located?
+```bash
+npm install
+# or
+yarn install
+```
 
-Proceed to describe how to install / setup one's local environment / get started with the project.
+Rename the .env.example file to .env and update the database connection string with your PostgreSQL credentials.
 
+Run the migrations to set up the database schema:
 
-## Usage
-How does one go about using it?
-Provide various use cases and code examples here.
+```bash
+npm run migrate
+# or
+yarn migrate
+```
 
-`write-your-code-here`
+Start the development server:
 
+```bash
+npm run dev
+# or
+yarn dev
+```
 
-## Project Status
-Project is: _in progress_ / _complete_ / _no longer being worked on_. If you are no longer working on it, provide reasons why.
+## Project Status 🧗‍♀️
+The project is currently a work in progress (WIP). I am focusing on the backend development to enhance my backend skills and add full-stack development capabilities to my profile.
 
-
-## Room for Improvement
-Include areas you believe need improvement / could be improved. Also add TODOs for future development.
-
-Room for improvement:
-- Improvement to be done 1
-- Improvement to be done 2
-
-To do:
-- Feature to be added 1
-- Feature to be added 2
-
+## Room for Improvement 🚀
+- Combo creation for specific characters via a form (React Hook Form + ZOD).
+- Combo sharing functionality.
+- Adding combos to favorites, accessible in the user dashboard.
+- Ranking of top combos rated by the community via a filter (sorting by date added).
+- Combo popularity ranking based on likes.
+- Combo management via a user dashboard: delete combos.
 
 ## Acknowledgements
-Give credit here.
-- This project was inspired by...
-- This project was based on [this tutorial](https://www.example.com).
-- Many thanks to...
-
+I would like to thank my mentor, Pierre Daily, for his guidance and support throughout this CRUD project.
 
 ## Contact
-Created by [@flynerdpl](https://www.flynerd.pl/) - feel free to contact me!
-
-
-<!-- Optional -->
-<!-- ## License -->
-<!-- This project is open source and available under the [... License](). -->
-
-<!-- You don't have to include all sections - just the one's relevant to your project -->
+Created by @maissoum - feel free to contact me at me@maissoum.dev 💌
