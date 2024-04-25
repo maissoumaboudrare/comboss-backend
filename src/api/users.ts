@@ -38,7 +38,7 @@ users.get("/:id", async (c) => {
     const user = await db
       .select()
       .from(userTable)
-      .where(eq(userTable.id, result[0].userId));
+      .where(eq(userTable.userID, result[0].userID));
 
     return c.json(user, 200);
   }
@@ -89,7 +89,7 @@ users.post("/login", async (c) => {
         const token: string = crypto.randomUUID();
         const expirationTime = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24h
 
-        await model.createSession({ userId: user.id, token, expirationTime });
+        await model.createSession({ userID: user.userID, token, expirationTime });
 
         setCookie(c, "session_token", token, {
           httpOnly: true,
