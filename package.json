@@ -6,7 +6,7 @@
   "scripts": {
     "generate-migration": "drizzle-kit generate:pg --out src/db/migrations --schema src/db/schema.ts",
     "migrate": "ts-node src/db/migrate",
-    "dev": "tsx watch src/api/users.ts"
+    "dev": "tsx watch src/index.ts"
   },
   "keywords": [],
   "author": "",

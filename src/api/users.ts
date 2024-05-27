@@ -1,4 +1,4 @@
-import { serve } from "@hono/node-server";
+
 import { Hono } from "hono";
 import { getCookie, setCookie, deleteCookie } from "hono/cookie";
 import * as model from "../model";
@@ -11,7 +11,7 @@ import { eq } from "drizzle-orm";
 
 import { isValidEmail, isValidPassword } from "../utils/validation";
 
-const app = new Hono();
+
 
 const users = new Hono();
 users.get("/", async (c) => {
@@ -35,16 +35,18 @@ users.get("/:id", async (c) => {
     if (result.length === 0)
       return c.json({ message: "Session not found !" }, 400);
 
+    const userID = Number(result[0].userID);
+    if (isNaN(userID)) {
+      return c.json({ message: "Invalid user ID in session" }, 400);
+    }
+
     const user = await db
       .select()
       .from(userTable)
-      .where(eq(userTable.userID, result[0].userID));
+      .where(eq(userTable.userID, userID));
 
     return c.json(user, 200);
   }
-
-  // const { id } = c.req.param();
-  // const user = await model.getUser(id);
   return c.json({ message: "Cookie not found !" }, 400);
 });
 users.post("/", async (c) => {
@@ -52,26 +54,11 @@ users.post("/", async (c) => {
   const addedUser = await model.createUser(newUser);
   return c.json(addedUser, 201);
 });
-users.post("/auth", async (c) => {
-  const credentials = await c.req.json();
-  const isUserAccount = await model.authUser(credentials);
-
-  if (isUserAccount) {
-    const isCorrectPassword = await argon2.verify(
-      isUserAccount[0].password,
-      credentials.password
-    );
-    return c.json(isCorrectPassword ? "Correct 👌" : "Incorrect ✋");
-  }
-
-  return c.json("User not found !");
-});
 
 // Login & Logout
 users.post("/login", async (c) => {
   const credentials = await c.req.json();
 
-  //TODO : Q > seperate if ?
   if (!isValidEmail(credentials.email) || !isValidPassword(credentials.password)) {
     return c.json({ message: "Invalid credentials format" }, 400);
   }
@@ -124,13 +111,4 @@ users.post("/logout", async (c) => {
   }
 });
 
-app.route("/api/users", users);
-
-app.get("/api/*", (c) => c.text("API endpoint is not found", 404));
-
-const port = 3000;
-
-serve({
-  fetch: app.fetch,
-  port,
-});
+export default users

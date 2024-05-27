@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import { db } from "./db/db";
 import * as schema from "./db/schema";
-import { InsertUser, InsertSession } from "./db/schema";
+import { InsertUser, InsertSession, InsertCharacter, InsertCombo, InsertInput } from "./db/schema";
 import * as argon2 from "argon2";
 
 // USER
@@ -15,7 +15,7 @@ export const getUser = async (id: string) => {
   const user = await db
     .select()
     .from(schema.users)
-    .where(sql`${schema.users.id} = ${id}`);
+    .where(sql`${schema.users.userID} = ${id}`);
 
   return user;
 };
@@ -68,4 +68,67 @@ export const getSessionByToken = async (token: string) => {
 
 export const deleteSession = async (token: string) => {
   await db.delete(schema.sessions).where(sql`${schema.sessions.token} = ${token}`);
+};
+
+export const getSessions = async () => {
+  return await db.select().from(schema.sessions);
+};
+
+export const deleteSessionByUserID = async (userID: number) => {
+  await db.delete(schema.sessions).where(sql`${schema.sessions.userID} = ${userID}`);
+};
+
+// Characters
+export const getCharacters = async () => {
+  return await db.select().from(schema.characters);
+};
+
+export const addCharacter = async (character: InsertCharacter) => {
+  return await db.insert(schema.characters).values(character).returning();
+};
+
+export const deleteCharacter = async (characterID: number) => {
+  await db.delete(schema.characters).where(sql`${schema.characters.characterID} = ${characterID}`);
+};
+
+export const updateCharacter = async (characterID: number, data: Partial<InsertCharacter>) => {
+  return await db.update(schema.characters).set(data).where(sql`${schema.characters.characterID} = ${characterID}`).returning();
+};
+
+// Combos
+export const getCombos = async () => {
+  return await db.select().from(schema.combos);
+};
+
+export const getCombosByCharacter = async (characterID: number) => {
+  return await db.select().from(schema.combos).where(sql`${schema.combos.characterID} = ${characterID}`);
+};
+
+export const getCombosByUser = async (userID: number) => {
+  return await db.select().from(schema.combos).where(sql`${schema.combos.userID} = ${userID}`);
+};
+
+export const addCombo = async (combo: Omit<InsertCombo, "userID">, userID: number) => {
+  return await db.insert(schema.combos).values({ ...combo, userID }).returning();
+};
+
+export const deleteCombo = async (comboID: number, userID: number) => {
+  await db.delete(schema.combos).where(sql`${schema.combos.comboID} = ${comboID} AND ${schema.combos.userID} = ${userID}`);
+};
+
+// Inputs
+export const getInputs = async () => {
+  return await db.select().from(schema.inputs);
+};
+
+export const addInput = async (input: InsertInput) => {
+  return await db.insert(schema.inputs).values(input).returning();
+};
+
+export const deleteInput = async (inputsID: string) => {
+  await db.delete(schema.inputs).where(sql`${schema.inputs.inputsID} = ${inputsID}`);
+};
+
+export const updateInput = async (inputsID: string, data: Partial<InsertInput>) => {
+  return await db.update(schema.inputs).set(data).where(sql`${schema.inputs.inputsID} = ${inputsID}`).returning();
 };

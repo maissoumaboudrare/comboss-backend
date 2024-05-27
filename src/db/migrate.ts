@@ -2,7 +2,7 @@ import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { db } from "./db";
 
 
-migrate(db, { migrationsFolder: "./src/db/migrations" })
+migrate(db, { migrationsFolder: "./src/db/migrations", migrationsSchema: './src/db/schema.ts' })
   .then(() => {
     console.log("Migrations complete!");
     process.exit(0);
