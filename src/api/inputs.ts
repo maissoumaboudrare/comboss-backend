@@ -8,7 +8,6 @@ inputs.get("/", async (c) => {
   return c.json(allInputs, 200);
 });
 
-// ??
 inputs.post("/", async (c) => {
   const newInput = await c.req.json();
   const addedInput = await model.addInput(newInput);
@@ -21,7 +20,7 @@ inputs.delete("/:inputsID", async (c) => {
   return c.json({ message: "Input deleted" }, 200);
 });
 
-inputs.put("/:inputsID", async (c) => {
+inputs.patch("/:inputsID", async (c) => {
   const inputsID = c.req.param("inputsID");
   const updatedData = await c.req.json();
   const updatedInput = await model.updateInput(inputsID, updatedData);

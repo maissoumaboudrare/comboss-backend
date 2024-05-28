@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS "characters" (
 	"weight" integer NOT NULL,
 	"story" text,
 	"type" varchar(10),
-	"effective_range" varchar(10),
+	"effective_range" varchar(11),
 	"ease_of_use" varchar(10),
 	"avatar" varchar(200) NOT NULL,
 	"number_of_combos" integer NOT NULL,

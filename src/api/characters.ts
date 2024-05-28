@@ -20,7 +20,7 @@ characters.delete("/:characterID", async (c) => {
   return c.json({ message: "Character deleted" }, 200);
 });
 
-characters.put("/:characterID", async (c) => {
+characters.patch("/:characterID", async (c) => {
   const characterID = parseInt(c.req.param("characterID"), 10);
   const updatedData = await c.req.json();
   const updatedCharacter = await model.updateCharacter(characterID, updatedData);

@@ -1,5 +1,5 @@
 {
-  "id": "b0495b71-8a15-48b1-8ca0-f4d3a56203fa",
+  "id": "43fae5d2-5ddc-4dc3-b737-e4916feefc11",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -46,7 +46,7 @@
         },
         "effective_range": {
           "name": "effective_range",
-          "type": "varchar(10)",
+          "type": "varchar(11)",
           "primaryKey": false,
           "notNull": false
         },

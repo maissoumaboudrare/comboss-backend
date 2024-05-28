@@ -40,7 +40,7 @@ export const characters = pgTable("characters", {
   weight: integer("weight").notNull(),
   story: text("story"),
   type: varchar("type", { length: 10 }),
-  effectiveRange: varchar("effective_range", { length: 10 }),
+  effectiveRange: varchar("effective_range", { length: 11 }),
   easeOfUse: varchar("ease_of_use", { length: 10 }),
   avatar: varchar("avatar", { length: 200 }).notNull(),
   numberOfCombos: integer("number_of_combos").notNull(),
