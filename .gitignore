@@ -3,3 +3,4 @@ node_modules
 hash.ts
 .DS_Store
 src/trash
+src/db/save

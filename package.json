@@ -6,7 +6,7 @@
   "scripts": {
     "generate-migration": "drizzle-kit generate:pg --out src/db/migrations --schema src/db/schema.ts",
     "migrate": "ts-node src/db/migrate",
-    "push": "drizzle-kit push:pg --schema=src/db/schema.ts --host=127.0.0.1 --port=5432 --user=rardooba --password=rar --database=combodb",
+    "push": "drizzle-kit push:pg",
     "dev": "tsx watch src/index.ts"
   },
   "keywords": [],

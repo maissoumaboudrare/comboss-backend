@@ -36,6 +36,7 @@ export const sessions = pgTable("sessions", {
 export const characters = pgTable("characters", {
   characterID: serial("character_id").primaryKey(),
   name: varchar("name", { length: 10 }).notNull(),
+  vitality: integer("vitality").notNull(),
   height: integer("height").notNull(),
   weight: integer("weight").notNull(),
   story: text("story"),
@@ -53,14 +54,15 @@ export const combos = pgTable("combos", {
   characterID: integer("character_id").references(() => characters.characterID, { onDelete: 'cascade' }),
   userID: integer("user_id").references(() => users.userID, { onDelete: 'cascade' }),
   position: text("position").notNull(),
+  combo: text("combo[]")
+  .array()
+  .default(sql`ARRAY[]::text[]`),
   likes: integer("likes").notNull(),
-  isSaved: boolean("is_saved"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const inputs = pgTable("inputs", {
   inputsID: serial("inputs_id").primaryKey(),
-  comboID: integer("combo_id").references(() => combos.comboID, { onDelete: 'cascade' }),
   directions: text("directions[]")
     .array()
     .default(sql`ARRAY[]::text[]`),

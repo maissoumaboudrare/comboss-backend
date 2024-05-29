@@ -11,3 +11,5 @@ migrate(db, { migrationsFolder: "./src/db/migrations", migrationsSchema: './src/
     console.error("Migrations failed!", err);
     process.exit(1);
   });
+
+  // ?? connection.end();
