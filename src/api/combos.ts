@@ -48,14 +48,34 @@ combos.post("/", async (c) => {
       return c.json({ message: "Invalid session" }, 401);
     }
 
-    const newCombo = await c.req.json();
-    const addedCombo = await model.addCombo(newCombo, session.userID);
+    const { combo, inputs } = await c.req.json();
+    const addedCombo = await model.addCombo({ ...combo, userID: session.userID, characterID: combo.characterID }, inputs);
     return c.json(addedCombo, 201);
   } catch (err) {
     console.error("Error adding combo:", err);
     return c.json({ message: "Error adding combo" }, 500);
   }
 });
+// combos.post("/", async (c) => {
+//   try {
+//     const token = getCookie(c, "session_token");
+//     if (!token) {
+//       return c.json({ message: "User not authenticated" }, 401);
+//     }
+
+//     const session = await model.getSessionByToken(token);
+//     if (!session || session.userID === null) {
+//       return c.json({ message: "Invalid session" }, 401);
+//     }
+
+//     const newCombo = await c.req.json();
+//     const addedCombo = await model.addCombo(newCombo, session.userID);
+//     return c.json(addedCombo, 201);
+//   } catch (err) {
+//     console.error("Error adding combo:", err);
+//     return c.json({ message: "Error adding combo" }, 500);
+//   }
+// });
 
 combos.delete("/:comboID", async (c) => {
   try {

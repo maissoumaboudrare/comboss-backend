@@ -24,10 +24,10 @@ inputs.post("/", async (c) => {
   }
 });
 
-inputs.delete("/:inputsID", async (c) => {
+inputs.delete("/:inputID", async (c) => {
   try {
-    const inputsID = c.req.param("inputsID");
-    await model.deleteInput(inputsID);
+    const inputID = parseInt(c.req.param("inputID"), 10);
+    await model.deleteInput(inputID);
     return c.json({ message: "Input deleted" }, 200);
   } catch (err) {
     console.error("Error deleting input:", err);
@@ -35,11 +35,11 @@ inputs.delete("/:inputsID", async (c) => {
   }
 });
 
-inputs.patch("/:inputsID", async (c) => {
+inputs.patch("/:inputID", async (c) => {
   try {
-    const inputsID = c.req.param("inputsID");
+    const inputID = parseInt(c.req.param("inputID"), 10);
     const updatedData = await c.req.json();
-    const updatedInput = await model.updateInput(inputsID, updatedData);
+    const updatedInput = await model.updateInput(inputID, updatedData);
     return c.json(updatedInput, 200);
   } catch (err) {
     console.error("Error updating input:", err);

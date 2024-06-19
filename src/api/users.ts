@@ -2,14 +2,15 @@
 import { Hono } from "hono";
 import { getCookie, setCookie, deleteCookie } from "hono/cookie";
 import * as model from "../model";
-import * as argon2 from "argon2";
 
+import * as argon2 from "argon2";
 import * as crypto from "crypto";
+
 import { db } from "../db/db";
 import { sessions, users as userTable } from "../db/schema";
 import { eq } from "drizzle-orm";
 
-import { isValidEmail, isValidPassword } from "../utils/validation";
+import { isValidEmail, isValidPassword, isValidUsername } from "../utils/validation";
 
 
 
@@ -24,34 +25,55 @@ users.get("/", async (c) => {
   }
 });
 users.get("/:id", async (c) => {
-  const token = getCookie(c, "session_token");
-
-  if (token) {
-    const result = await db
-      .select()
-      .from(sessions)
-      .where(eq(sessions.token, token));
-
-    if (result.length === 0)
-      return c.json({ message: "Session not found !" }, 400);
-
-    const userID = Number(result[0].userID);
-    if (isNaN(userID)) {
-      return c.json({ message: "Invalid user ID in session" }, 400);
+  const { id } = c.req.param();
+  try {
+    const user = await model.getUser(id);
+    if (user) {
+      return c.json(user, 200);
+    } else {
+      return c.json({ message: "User not found" }, 404);
     }
-
-    const user = await db
-      .select()
-      .from(userTable)
-      .where(eq(userTable.userID, userID));
-
-    return c.json(user, 200);
+  } catch (err) {
+    console.error("Error fetching user:", err);
+    return c.json({ message: "Error fetching user" }, 500);
   }
-  return c.json({ message: "Cookie not found !" }, 400);
 });
+// users.get("/:id", async (c) => {
+//   const token = getCookie(c, "session_token");
+
+//   if (token) {
+//     const result = await db
+//       .select()
+//       .from(sessions)
+//       .where(eq(sessions.token, token));
+
+//     if (result.length === 0)
+//       return c.json({ message: "Session not found !" }, 400);
+
+//     const userID = Number(result[0].userID);
+//     if (isNaN(userID)) {
+//       return c.json({ message: "Invalid user ID in session" }, 400);
+//     }
+
+//     const user = await db
+//       .select()
+//       .from(userTable)
+//       .where(eq(userTable.userID, userID));
+
+//     return c.json(user, 200);
+//   }
+//   return c.json({ message: "Cookie not found !" }, 400);
+// });
+
 users.post("/", async (c) => {
   const newUser = await c.req.json();
+
+  if (!isValidEmail(newUser.email) || !isValidPassword(newUser.password) || !isValidUsername(newUser.pseudo)) {
+    return c.json({ message: "Invalid user data format" }, 400);
+  }
+
   const addedUser = await model.createUser(newUser);
+
   return c.json(addedUser, 201);
 });
 
