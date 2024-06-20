@@ -13,6 +13,20 @@ characters.get("/", async (c) => {
   }
 });
 
+characters.get("/:characterID", async (c) => {
+  try {
+    const characterID = parseInt(c.req.param("characterID"), 10);
+    const character = await model.getCharacterById(characterID);
+    if (!character) {
+      return c.json({ message: "Character not found" }, 404);
+    }
+    return c.json(character, 200);
+  } catch (err) {
+    console.error("Error fetching character:", err);
+    return c.json({ message: "Error fetching character" }, 500);
+  }
+});
+
 characters.post("/", async (c) => {
   try {
     const newCharacter = await c.req.json();

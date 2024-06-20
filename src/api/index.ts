@@ -4,8 +4,21 @@ import sessions from "./sessions";
 import characters from "./characters";
 import combos from "./combos";
 import inputs from "./inputs";
+import { cors } from 'hono/cors';
 
 const app = new Hono();
+
+app.use(
+  '/api/*',
+  cors({
+    origin: 'http://localhost:3000',
+    allowHeaders: ['X-Custom-Header', 'Upgrade-Insecure-Requests', 'Content-Type', 'Authorization'],
+    allowMethods: ['POST', 'GET', 'UPDATE', 'OPTIONS'],
+    exposeHeaders: ['Content-Length', 'X-Kuma-Revision'],
+    maxAge: 600,
+    credentials: true,
+  })
+)
 
 app.route("/api/users", users);
 app.route("/api/sessions", sessions);
