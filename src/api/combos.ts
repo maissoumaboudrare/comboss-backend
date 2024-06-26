@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import * as model from "../model";
+import * as model from "../models";
 import { getCookie } from "hono/cookie";
 
 const combos = new Hono();
@@ -39,17 +39,21 @@ combos.get("/user/:userID", async (c) => {
 combos.post("/", async (c) => {
   try {
     const token = getCookie(c, "session_token");
+
     if (!token) {
       return c.json({ message: "User not authenticated" }, 401);
     }
 
     const session = await model.getSessionByToken(token);
+
     if (!session || session.userID === null) {
       return c.json({ message: "Invalid session" }, 401);
     }
 
-    const { combo, inputs } = await c.req.json();
-    const addedCombo = await model.addCombo({ ...combo, userID: session.userID, characterID: combo.characterID }, inputs);
+    const { combo, positions, inputs } = await c.req.json();
+
+    //! Pas nécessaire ? characterID: combo.characterID
+    const addedCombo = await model.addCombo({ ...combo, userID: session.userID }, positions, inputs);
     return c.json(addedCombo, 201);
   } catch (err) {
     console.error("Error adding combo:", err);

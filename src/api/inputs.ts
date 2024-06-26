@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import * as model from "../model";
+import * as model from "../models";
 
 const inputs = new Hono();
 
