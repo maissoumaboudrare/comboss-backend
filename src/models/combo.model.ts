@@ -9,7 +9,6 @@ export const getCombos = async () => {
 };
 
 export const getCombosByCharacter = async (characterID: number) => {
-
   const getCombosOfCharacter = await db
     .select({
       comboID: schema.combos.comboID,
@@ -18,6 +17,10 @@ export const getCombosByCharacter = async (characterID: number) => {
     })
     .from(schema.combos)
     .where(eq(schema.combos.characterID, characterID));
+
+  if (getCombosOfCharacter.length === 0) {
+    return [];
+  }
 
   const extractComboIDs = getCombosOfCharacter.map((combo) => combo.comboID);
 
@@ -73,11 +76,10 @@ export const getCombosByCharacter = async (characterID: number) => {
     username: users.find((user) => user.userID === combo.userID)?.pseudo,
   }));
 
-  return combineResults
+  return combineResults;
 };
 
 export const getCombosByUser = async (userID: number) => {
-
   const getCombosOfUser = await db
     .select({
       comboID: schema.combos.comboID,
@@ -138,10 +140,12 @@ export const getCombosByUser = async (userID: number) => {
     comboName: combo.comboName,
     positions: getPositionsOfCombos[index].map((pos) => pos.positionName),
     inputs: getInputsOfCombos[index],
-    characterName: characters.find((character) => character.characterID === combo.characterID)?.name,
+    characterName: characters.find(
+      (character) => character.characterID === combo.characterID
+    )?.name,
   }));
 
-  return combineResults
+  return combineResults;
 };
 
 // Update addCombo function
@@ -163,7 +167,7 @@ export const addCombo = async (
       .from(schema.positions)
       .where(eq(schema.positions.positionName, position.positionName))
       .limit(1)
-      .then(result => result[0]?.positionID);
+      .then((result) => result[0]?.positionID);
 
     if (existingPosition) {
       positionID = existingPosition;
@@ -185,7 +189,7 @@ export const addCombo = async (
           sql`${schema.inputs.inputName} = ${input.inputName} AND ${schema.inputs.inputSrc} = ${input.inputSrc}`
         )
         .limit(1)
-        .then(result => result[0]?.inputID);
+        .then((result) => result[0]?.inputID);
 
       if (existingInput) {
         inputID = existingInput;
@@ -204,64 +208,6 @@ export const addCombo = async (
 
   return addedCombo[0];
 };
-// export const addCombo = async (
-//   combo: Omit<InsertCombo, "comboID">,
-//   positions: { positionName: string }[],
-//   inputs: { inputName: string; inputSrc: string }[][]
-// ) => {
-//   const addedCombo = await db.insert(schema.combos).values(combo).returning();
-
-//   const comboID = addedCombo[0].comboID;
-
-//   for (const position of positions) {
-//     let positionID: number;
-
-//     const existingPosition = await db
-//       .select({ positionID: schema.positions.positionID })
-//       .from(schema.positions)
-//       .where(sql`${schema.positions.positionName} = ${position.positionName}`)
-//       .limit(1);
-
-//     if (existingPosition.length > 0) {
-//       positionID = existingPosition[0].positionID;
-//     } else {
-//       throw new Error("Position name does not exist!")
-//     }
-    
-
-//     await addComboPosition(comboID, positionID);
-//   }
-
-//   // Add inputs to combo_inputs
-//   for (const [lineOrder, lineInputs] of inputs.entries()) {
-//     for (const [inputOrder, input] of lineInputs.entries()) {
-//       let inputID: number;
-
-//       const existingInput = await db
-//         .select({ inputID: schema.inputs.inputID })
-//         .from(schema.inputs)
-//         .where(
-//           sql`${schema.inputs.inputName} = ${input.inputName} AND ${schema.inputs.inputSrc} = ${input.inputSrc}`
-//         )
-//         .limit(1);
-
-//       if (existingInput.length > 0) {
-//         inputID = existingInput[0].inputID;
-//       } else {
-//         throw new Error("Input does not exist!");
-//       }
-
-//       await db.insert(schema.comboInputs).values({
-//         comboID,
-//         inputID,
-//         lineOrder,
-//         inputOrder,
-//       });
-//     }
-//   }
-
-//   return addedCombo[0];
-// };
 
 export const deleteCombo = async (comboID: number, userID: number) => {
   await db

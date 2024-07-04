@@ -23,7 +23,7 @@ auth.get('/status', async (c) => {
       return c.json({ message: "User not connected 🚫", isAuthenticated: false });
     }
 
-    return c.json({ message: "User authenticated ✅", isAuthenticated: true });
+    return c.json({ message: "User authenticated ✅", isAuthenticated: true, id: session.userID });
 
   } catch (err) {
     console.error('Error checking authentication status:', err);

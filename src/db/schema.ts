@@ -25,6 +25,7 @@ export const users = pgTable("users", {
   email: varchar("email", { length: 20 }).notNull().unique(),
   password: text("password").notNull(),
   isPremium: boolean("is_member").default(sql`'false'::boolean`),
+  avatar: varchar("avatar", { length: 200 }),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at"),
 });
