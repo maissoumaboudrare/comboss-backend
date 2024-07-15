@@ -6,6 +6,8 @@ import characters from "./characters";
 import combos from "./combos";
 import positions from "./positions";
 import inputs from "./inputs";
+import likes from "./likes";
+import favorites from "./favorites";
 import { cors } from 'hono/cors';
 
 const app = new Hono();
@@ -29,6 +31,8 @@ app.route("/api/characters", characters);
 app.route("/api/combos", combos);
 app.route("/api/positions", positions);
 app.route("/api/inputs", inputs);
+app.route("/api/likes", likes);
+app.route("/api/favorites", favorites);
 
 app.get("/api/*", (c) => c.text("API endpoint is not found", 404));
 

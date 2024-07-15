@@ -17,7 +17,17 @@ combos.get("/", async (c) => {
 combos.get("/character/:characterID", async (c) => {
   try {
     const characterID = parseInt(c.req.param("characterID"), 10);
-    const characterCombos = await model.getCombosByCharacter(characterID);
+    const token = getCookie(c, "session_token");
+    let userID: number | undefined;
+
+    if (token) {
+      const session = await model.getSessionByToken(token);
+      if (session && session.userID !== null) {
+        userID = session.userID;
+      }
+    }
+
+    const characterCombos = await model.getCombosByCharacter(characterID, userID);
     return c.json(characterCombos, 200);
   } catch (err) {
     console.error("Error fetching character combos:", err);
@@ -52,7 +62,7 @@ combos.post("/", async (c) => {
 
     const { combo, positions, inputs } = await c.req.json();
 
-    const addedCombo = await model.addCombo({ ...combo, userID: session.userID }, positions, inputs);
+    const addedCombo = await model.addCombo({ ...combo, userID: session.userID}, positions, inputs);
     return c.json(addedCombo, 201);
   } catch (err) {
     console.error("Error adding combo:", err);

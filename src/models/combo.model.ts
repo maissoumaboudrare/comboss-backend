@@ -8,12 +8,14 @@ export const getCombos = async () => {
   return await db.select().from(schema.combos);
 };
 
-export const getCombosByCharacter = async (characterID: number) => {
+export const getCombosByCharacter = async (characterID: number, userID?: number) => {
   const getCombosOfCharacter = await db
     .select({
       comboID: schema.combos.comboID,
       comboName: schema.combos.comboName,
+      videoURL: schema.combos.videoURL,
       userID: schema.combos.userID,
+      createdAt: schema.combos.createdAt,
     })
     .from(schema.combos)
     .where(eq(schema.combos.characterID, characterID));
@@ -64,16 +66,52 @@ export const getCombosByCharacter = async (characterID: number) => {
     .select({
       userID: schema.users.userID,
       pseudo: schema.users.pseudo,
+      avatar: schema.users.avatar,
     })
     .from(schema.users)
     .where(inArray(schema.users.userID, getUserIDsOfCombos));
 
+    const getLikesOfCombos = await Promise.all(
+      extractComboIDs.map((comboID) =>
+        db
+          .select({ count: sql`COUNT(${schema.likes.likeID})` })
+          .from(schema.likes)
+          .where(eq(schema.likes.comboID, comboID))
+          .then((result) => result[0]?.count || 0)
+      )
+    );
+
+    const getFavoritesOfUser = userID
+    ? await db
+        .select({
+          comboID: schema.favorites.comboID,
+        })
+        .from(schema.favorites)
+        .where(eq(schema.favorites.userID, userID))
+    : [];
+
+    const getLikesByUser = userID
+    ? await db
+        .select({
+          comboID: schema.likes.comboID,
+        })
+        .from(schema.likes)
+        .where(eq(schema.likes.userID, userID))
+    : [];
+
   const combineResults = getCombosOfCharacter.map((combo, index) => ({
     comboID: combo.comboID,
     comboName: combo.comboName,
+    videoURL: combo.videoURL,
     positions: getPositionsOfCombos[index].map((pos) => pos.positionName),
     inputs: getInputsOfCombos[index],
     username: users.find((user) => user.userID === combo.userID)?.pseudo,
+    avatar: users.find((user) => user.userID === combo.userID)?.avatar,
+    userID: users.find((user) => user.userID === combo.userID)?.userID,
+    likeCount: getLikesOfCombos[index],
+    isFavorite: getFavoritesOfUser.some((fav) => fav.comboID === combo.comboID),
+    isLiked: getLikesByUser.some((like) => like.comboID === combo.comboID),
+    createdAt: combo.createdAt,
   }));
 
   return combineResults;
@@ -84,6 +122,7 @@ export const getCombosByUser = async (userID: number) => {
     .select({
       comboID: schema.combos.comboID,
       comboName: schema.combos.comboName,
+      videoURL: schema.combos.videoURL,
       characterID: schema.combos.characterID,
     })
     .from(schema.combos)
@@ -138,6 +177,7 @@ export const getCombosByUser = async (userID: number) => {
   const combineResults = getCombosOfUser.map((combo, index) => ({
     comboID: combo.comboID,
     comboName: combo.comboName,
+    videoURL: combo.videoURL,
     positions: getPositionsOfCombos[index].map((pos) => pos.positionName),
     inputs: getInputsOfCombos[index],
     characterName: characters.find(

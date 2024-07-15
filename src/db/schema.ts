@@ -18,11 +18,15 @@ export type InsertCombo = InferInsertModel<typeof combos>;
 export type InsertInput = InferInsertModel<typeof inputs>;
 export type InsertPosition = InferInsertModel<typeof positions>;
 export type InsertComboPosition = InferInsertModel<typeof comboPositions>;
+export type InsertLike = InferInsertModel<typeof likes>;
+// export type InsertComboLike = InferInsertModel<typeof comboLikes>;
+export type InsertFavorite = InferInsertModel<typeof favorites>;
+// export type InsertComboFavorite = InferInsertModel<typeof comboFavorites>;
 
 export const users = pgTable("users", {
   userID: serial("user_id").primaryKey(),
   pseudo: varchar("pseudo", { length: 8 }).notNull().unique(),
-  email: varchar("email", { length: 20 }).notNull().unique(),
+  email: varchar("email", { length: 50 }).notNull().unique(),
   password: text("password").notNull(),
   isPremium: boolean("is_member").default(sql`'false'::boolean`),
   avatar: varchar("avatar", { length: 200 }),
@@ -63,6 +67,7 @@ export const combos = pgTable("combos", {
     { onDelete: "cascade" }
   ),
   comboName: varchar("combo_name", { length: 50 }).notNull(),
+  videoURL: varchar("video_url", { length: 200 }),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -119,3 +124,85 @@ export const comboInputs = pgTable(
     };
   }
 );
+
+export const likes = pgTable("likes", {
+  likeID: serial("like_id").primaryKey(),
+  userID: integer("user_id").references(() => users.userID, {
+    onDelete: "cascade",
+  }).notNull(),
+  comboID: integer("combo_id").references(() => combos.comboID, {
+    onDelete: "cascade",
+  }).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// export const comboLikes = pgTable(
+//   "combo_likes",
+//   {
+//     likeID: integer("like_id").references(() => likes.likeID, {
+//       onDelete: "cascade",
+//     }),
+//     comboID: integer("combo_id").references(() => combos.comboID, {
+//       onDelete: "cascade",
+//     }),
+//     userID: integer("user_id").references(() => users.userID, {
+//       onDelete: "cascade",
+//     }),
+//     characterID: integer("character_id").references(() => characters.characterID, {
+//       onDelete: "cascade",
+//     }),
+//   },
+//   (table) => {
+//     return {
+//       pk: primaryKey({
+//         columns: [
+//           table.likeID,
+//           table.comboID,
+//           table.userID,
+//           table.characterID,
+//         ],
+//       }),
+//     };
+//   }
+// );
+
+export const favorites = pgTable("favorites", {
+  favoriteID: serial("favorite_id").primaryKey(),
+  userID: integer("user_id").references(() => users.userID, {
+    onDelete: "cascade",
+  }).notNull(),
+  comboID: integer("combo_id").references(() => combos.comboID, {
+    onDelete: "cascade",
+  }).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// export const comboFavorites = pgTable(
+//   "combo_favorites",
+//   {
+//     favoriteID: integer("favorite_id").references(() => favorites.favoriteID, {
+//       onDelete: "cascade",
+//     }),
+//     comboID: integer("combo_id").references(() => combos.comboID, {
+//       onDelete: "cascade",
+//     }),
+//     userID: integer("user_id").references(() => users.userID, {
+//       onDelete: "cascade",
+//     }),
+//     characterID: integer("character_id").references(() => characters.characterID, {
+//       onDelete: "cascade",
+//     }),
+//   },
+//   (table) => {
+//     return {
+//       pk: primaryKey({
+//         columns: [
+//           table.favoriteID,
+//           table.comboID,
+//           table.userID,
+//           table.characterID,
+//         ],
+//       }),
+//     };
+//   }
+// );
