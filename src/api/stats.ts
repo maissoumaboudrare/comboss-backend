@@ -11,7 +11,6 @@ stats.get('/:characterID', async (c) => {
 
   try {
     const stats = await getCharacterStats(characterID);
-    console.log('Stats:', stats);
     return c.json(stats);
   } catch (error) {
     return c.json({ error: 'Failed to fetch stats' }, 500);
