@@ -96,7 +96,7 @@ auth.get('/google/callback', async (c) => {
       expires: expirationTime,
     });
 
-    return c.redirect('http://localhost:3000/');
+    return c.redirect(`${process.env.FRONT_REDIRECT_URL}`);
   } catch (err) {
     console.error('Error during Google callback:', err);
     return c.json({ message: 'Internal Server Error' }, 500);
