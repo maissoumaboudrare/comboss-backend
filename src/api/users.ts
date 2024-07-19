@@ -116,8 +116,6 @@ users.post("/logout", async (c) => {
   }
 });
 
-//TODO Postman: change password, Delete user account, update avatar
-
 users.patch("/:userID/password", async (c) => {
   const token = getCookie(c, "session_token");
 

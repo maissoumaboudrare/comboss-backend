@@ -19,13 +19,11 @@ export type InsertInput = InferInsertModel<typeof inputs>;
 export type InsertPosition = InferInsertModel<typeof positions>;
 export type InsertComboPosition = InferInsertModel<typeof comboPositions>;
 export type InsertLike = InferInsertModel<typeof likes>;
-// export type InsertComboLike = InferInsertModel<typeof comboLikes>;
 export type InsertFavorite = InferInsertModel<typeof favorites>;
-// export type InsertComboFavorite = InferInsertModel<typeof comboFavorites>;
 
 export const users = pgTable("users", {
   userID: serial("user_id").primaryKey(),
-  pseudo: varchar("pseudo", { length: 8 }).notNull().unique(),
+  pseudo: varchar("pseudo", { length: 20 }).notNull().unique(),
   email: varchar("email", { length: 50 }).notNull().unique(),
   password: text("password").notNull(),
   isPremium: boolean("is_member").default(sql`'false'::boolean`),
