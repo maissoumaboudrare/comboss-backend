@@ -194,16 +194,17 @@ users.delete("/:userID", async (c) => {
   }
 });
 
-users.get("/combos/:comboID/likes", async (c) => {
-  const comboID = parseInt(c.req.param("comboID"), 10);
-  const likeCount = await model.getLikesByCombo(comboID);
-  return c.json({ likeCount });
-});
+// ! return c.json({ likeCount }, 200);
+// users.get("/combos/:comboID/likes", async (c) => {
+//   const comboID = parseInt(c.req.param("comboID"), 10);
+//   const likeCount = await model.getLikesByCombo(comboID);
+//   return c.json({ likeCount });
+// });
 
-users.get("/:userID/favorites", async (c) => {
-  const userID = parseInt(c.req.param("userID"), 10);
-  const favorites = await model.getFavoritesByUser(userID);
-  return c.json(favorites);
-});
+// users.get("/:userID/favorites", async (c) => {
+//   const userID = parseInt(c.req.param("userID"), 10);
+//   const favorites = await model.getFavoritesByUser(userID);
+//   return c.json(favorites, 200);
+// });
 
 export default users;

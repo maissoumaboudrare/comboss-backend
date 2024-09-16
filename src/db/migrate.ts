@@ -1,6 +1,8 @@
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { db } from "./db";
 
+// ! review migration concept
+
 migrate(db, {
   migrationsFolder: "./src/db/migrations",
   migrationsTable: "combosss_migrations",

@@ -77,7 +77,7 @@ auth.get('/google/callback', async (c) => {
     let user = await authModel.getUserByEmail(userInfo.email);
 
     console.log(userInfo.name)
-
+    // TODO If i want to update password with user google connect ? password: '' put ternari operator
     if (!user) {
       user = await authModel.createUser(userInfo.name, userInfo.email, userInfo.picture);
     }

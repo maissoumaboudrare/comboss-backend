@@ -74,7 +74,6 @@ export const deleteUserByUserID = async (userID: number) => {
 };
 
 export const updateUserPassword = async (userID: number, hashedPassword: string) => {
-  console.log(hashedPassword)
   return await db
     .update(schema.users)
     .set({ password: hashedPassword })

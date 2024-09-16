@@ -2,7 +2,7 @@ import { db } from "../db/db";
 import * as schema from "../db/schema";
 import { InsertCombo } from "../db/schema";
 import { sql, eq, inArray } from "drizzle-orm";
-import { addPosition } from "./position.model";
+// import { addPosition } from "./position.model";
 
 export const getCombos = async () => {
   return await db.select().from(schema.combos);
